@@ -5,11 +5,11 @@ from typing import List
 API_URL = "http://127.0.0.1:8000/generate_video"
 
 #setting character limit
-CHARACTER_LIMIT=100
+CHARACTER_LIMIT=50
 
 #function to break text into chunks
 def split_text(text, limit):
-    if len(text) <= limit:
+    if len(text) <= limit: 
         return [text]
     
     chunks = []
@@ -42,9 +42,9 @@ def video_id_for_chunk(chunk, avatar_id, voice_id):
     
 # Main function to handle the whole process
 def generate_videos(text, avatar_id, voice_id):
-    """
-    Splits the text into chunks if needed, sends each chunk to the backend, and collects video IDs.
-    """
+    
+    #Splits the text into chunks if needed, sends each chunk to the backend, and collects video IDs.
+    
     if len(text) > CHARACTER_LIMIT:
         chunks = split_text(text, CHARACTER_LIMIT)
         print(f"Text has been split into {len(chunks)} chunks: {chunks}")
@@ -55,22 +55,19 @@ def generate_videos(text, avatar_id, voice_id):
 
     for i, chunk in enumerate(chunks):
         print(f"Processing chunk {i + 1}/{len(chunks)}: {chunk}")
-        video_id = video_id_for_chunk(chunk, avatar_id, voice_id)
-        
-        if video_id:
-            print(f"Video ID for chunk {i + 1}: {video_id}")
-            video_ids.append(video_id)
-        else:
-            print(f"Failed to generate video for chunk {i + 1}")
+        video_id = video_id_for_chunk(chunk, avatar_id, voice_id)#it sends to the backened to create for that text
+    
+    if video_id:
+        print(f"Video ID for chunk {i + 1}: {video_id}")
+        video_ids.append(video_id)
 
-    return video_ids
 
 # Example usage
 if __name__ == "__main__":
-    text = "This is a sample text that exceeds the character limit set for generating avatar videos. " \
-           "The purpose is to test how the system splits the text into chunks and handles them sequentially for video creation."
-    avatar_id = "avatar_123"
-    voice_id = "voice_abc"
+     # Taking input text from the user
+    text = input("Enter the text to generate avatar videos: ")
+    avatar_id = input("Enter the avatar ID: ")
+    voice_id = input("Enter the voice ID: ")
 
     print("Starting video generation process...")
     video_ids = generate_videos(text, avatar_id, voice_id)
